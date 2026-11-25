@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard | Your App</title>
+    <link rel="stylesheet" href="auth/auth-style.css"> <!-- Reusing styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .dashboard-container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 1rem;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        #user-photo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+        }
+        .btn-logout {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 0.5rem 1.25rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn-logout:hover {
+            background: var(--error-color);
+            color: white;
+        }
+        .welcome-card {
+            background: linear-gradient(135deg, #6366f1, #c084fc);
+            padding: 3rem;
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .welcome-card h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .feature-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- User Auth Guard -->
+    <script type="module" src="user-auth-guard.js"></script>
+
+    <div id="main-content" class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="user-info">
+                <img id="user-photo" src="https://ui-avatars.com/api/?name=User" alt="User">
+                <div>
+                    <h1 id="welcome-text">Loading...</h1>
+                    <p id="user-email" style="color: var(--text-muted); font-size: 0.875rem;"></p>
+                </div>
+            </div>
+            <button id="logout-btn" class="btn-logout">Logout</button>
+        </header>
+
+        <section class="welcome-card">
+            <h2>Welcome to Your Dashboard!</h2>
+            <p style="font-size: 1.125rem; opacity: 0.9;">This is your personal area. You've successfully authenticated and verified your profile.</p>
+        </section>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3 style="margin-bottom: 1rem; color: var(--primary-color);">My Profile</h3>
+                <p style="color: var(--text-muted);">Manage your personal information and security settings here.</p>
+            </div>
+            <div class="feature-card">
+                <h3 style="margin-bottom: 1rem; color: var(--primary-color);">Recent Activity</h3>
+                <p style="color: var(--text-muted);">View your login history and account activities.</p>
+            </div>
+            <div class="feature-card">
+                <h3 style="margin-bottom: 1rem; color: var(--primary-color);">Notifications</h3>
+                <p style="color: var(--text-muted);">Stay updated with the latest news and alerts.</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, signOut, onAuthStateChanged } from "./admin/firebase-config.js";
+
+        const logoutBtn = document.getElementById('logout-btn');
+        const welcomeText = document.getElementById('welcome-text');
+        const userEmail = document.getElementById('user-email');
+        const userPhoto = document.getElementById('user-photo');
+
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                window.location.href = "auth/login.html";
+            } catch (error) {
+                console.error("Logout error:", error);
+            }
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                welcomeText.textContent = "Hey, " + (user.displayName || user.email.split('@')[0]) + "!";
+                userEmail.textContent = user.email;
+                if (user.photoURL) {
+                    userPhoto.src = user.photoURL;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

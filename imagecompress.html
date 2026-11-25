@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptiPress - Privacy-First Image Compressor</title>
+     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .custom-slider::-webkit-slider-runnable-track {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+        }
+        .custom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            background: #2563eb;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: -6px;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+        <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7P8869EEFY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-7P8869EEFY');
+</script>
+    <!-- Tailwind CSS for Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="ads.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen">
+
+    <div class="max-w-5xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <header class="flex items-center justify-between mb-8">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 p-2 rounded-xl text-white">
+                    <i class="fa-solid fa-arrows-rotate fa-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight">OptiPress</h1>
+                    <p class="text-sm text-slate-500">Fast & Safe Browser Compression</p>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center gap-2 text-xs font-medium text-slate-400 bg-white px-3 py-1 rounded-full border border-slate-200 shadow-sm">
+                <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                100% Private Processing
+            </div>
+        </header>
+
+        <!-- Upload Section (Initial State) -->
+        <div id="uploadZone" class="border-2 border-dashed border-slate-300 rounded-3xl p-12 bg-white hover:border-blue-400 transition-all flex flex-col items-center justify-center text-center cursor-pointer group shadow-sm">
+            <input type="file" id="fileInput" class="hidden" accept="image/*">
+            <div class="w-20 h-20 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-cloud-arrow-up fa-2x"></i>
+            </div>
+            <h2 class="text-xl font-semibold mb-2">Select an image to compress</h2>
+            <p class="text-slate-500 mb-8 max-w-sm text-sm">
+                Your images never leave your computer. Supports JPG, PNG, and WebP.
+            </p>
+            <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 text-white px-8 py-3 rounded-full font-medium hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 active:scale-95">
+                Browse Files
+            </button>
+        </div>
+
+        <!-- Editor Section (Hidden by default) -->
+        <div id="editorZone" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Controls Sidebar -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center gap-2 mb-6 text-slate-800 font-semibold">
+                        <i class="fa-solid fa-sliders text-blue-600"></i>
+                        <h3>Compression Settings</h3>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Quality -->
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <label class="text-sm font-medium">Quality</label>
+                                <span id="qualityValue" class="text-sm font-bold text-blue-600">80%</span>
+                            </div>
+                            <input type="range" id="qualitySlider" min="10" max="100" value="80" class="w-full custom-slider appearance-none bg-transparent">
+                        </div>
+
+                        <!-- Format -->
+                        <div>
+                            <label class="text-sm font-medium block mb-3">Output Format</label>
+                            <div class="grid grid-cols-3 gap-2" id="formatButtons">
+                                <button data-format="image/jpeg" class="format-btn py-2 px-1 rounded-xl text-xs font-bold border transition-all bg-blue-50 border-blue-600 text-blue-600 shadow-sm">JPG</button>
+                                <button data-format="image/png" class="format-btn py-2 px-1 rounded-xl text-xs font-bold border transition-all bg-white border-slate-200 text-slate-500 hover:border-slate-300">PNG</button>
+                                <button data-format="image/webp" class="format-btn py-2 px-1 rounded-xl text-xs font-bold border transition-all bg-white border-slate-200 text-slate-500 hover:border-slate-300">WEBP</button>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="pt-4 border-t border-slate-100">
+                            <button id="downloadBtn" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-blue-700 shadow-lg shadow-blue-100 transition-all active:scale-95">
+                                <i class="fa-solid fa-download"></i>
+                                Download Result
+                            </button>
+                            <button onclick="resetApp()" class="w-full mt-3 text-slate-400 py-2 text-sm font-medium hover:text-red-500 transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-trash-can"></i>
+                                Remove Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Card -->
+                <div class="bg-slate-900 text-white p-6 rounded-3xl shadow-xl">
+                    <div class="flex items-center gap-2 mb-4 text-slate-400">
+                        <i class="fa-solid fa-circle-info text-xs"></i>
+                        <span class="text-xs uppercase tracking-widest font-bold">Optimization Info</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-end">
+                            <span class="text-sm text-slate-400 font-medium">Original</span>
+                            <span id="originalSize" class="font-bold">-</span>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <span class="text-sm text-slate-400 font-medium">Optimized</span>
+                            <span id="compressedSize" class="font-bold text-green-400">-</span>
+                        </div>
+                        <div class="h-px bg-slate-800"></div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-slate-400 font-medium">Space Saved</span>
+                            <span id="savingsLabel" class="bg-green-500/20 text-green-400 px-3 py-1 rounded-lg text-sm font-bold">
+                                0%
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Main Area -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col min-h-[500px]">
+                    <div class="flex border-b border-slate-100 bg-slate-50/50">
+                        <div class="flex-1 py-4 px-6 text-center text-xs font-bold uppercase tracking-wider text-slate-400 border-r border-slate-200">
+                            Original
+                        </div>
+                        <div class="flex-1 py-4 px-6 text-center text-xs font-bold uppercase tracking-wider text-blue-600">
+                            Compressed Preview
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1 relative bg-slate-100 grid grid-cols-1 md:grid-cols-2">
+                        <div class="border-r border-slate-200 flex items-center justify-center p-4">
+                            <img id="originalPreview" src="" alt="Original" class="max-h-[400px] rounded shadow-md object-contain bg-white">
+                        </div>
+                        <div class="flex items-center justify-center p-4 bg-slate-50">
+                            <img id="compressedPreview" src="" alt="Compressed" class="max-h-[400px] rounded shadow-md object-contain bg-white">
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-white border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-image"></i>
+                            <span id="dimLabel">Resolution: -</span>
+                        </div>
+                        <div class="flex items-center gap-1 text-green-600 font-medium">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Processing Securely</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+          <!-- Middle Ad Slot -->
+        <div id="middle-ad-slot" class="ad-container my-12 px-4 flex justify-center"></div>
+
+  <!-- Footer -->
+    <footer id="footer" class="bg-slate-50 border-t border-slate-200 pt-16 pb-8 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">Q</div>
+                        <span class="text-xl font-bold text-slate-900">QuickTools</span>
+                    </div>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        A privacy-first suite of daily utility tools. No data is stored on our servers — everything happens in your browser.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wider">Quick Links</h4>
+                    <ul class="text-slate-600 text-sm space-y-3">
+                        <li><a href="edit-img.html" class="hover:text-blue-600 transition">Image Resizer</a></li>
+                        <li><a href="imgtopdf.html" class="hover:text-blue-600 transition">PDF Converter</a></li>
+                        <li><a href="qr.html" class="hover:text-blue-600 transition">QR Generator</a></li>
+                        <li><a href="sketch.html" class="hover:text-blue-600 transition">Sketchpad</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wider">Support</h4>
+                    <ul class="text-slate-600 text-sm space-y-3">
+                        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdeeyMMWJURlyHRt-jEcuG5ujx2Uut6MkdPWK_tu7pU_OrJIQ/viewform?usp=publish-editor" class="hover:text-blue-600 flex items-center gap-1 transition"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg> Report an Issue</a></li>
+                        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdbpLX_a-nj4ujoec6z1YhIV901bxDaDFJeHGZMMolwmkvcNg/viewform?usp=publish-editor" class="hover:text-blue-600 transition">Feature Request</a></li>
+                        <li><a href="status.html" class="hover:text-blue-600 transition">Status Page</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wider">Legal</h4>
+                    <ul class="text-slate-600 text-sm space-y-3">
+                        <li><a href="terms.html" class="hover:text-blue-600 transition">Terms of Service</a></li>
+                        <li><a href="privacy.html" class="hover:text-blue-600 transition">Privacy Policy</a></li>
+                        <li class="pt-2 font-medium text-slate-900 border-t border-slate-200 mt-2">Developed by <span class="text-blue-600">NR0846</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="bottom-ad-slot" class="ad-container mb-8"></div>
+            
+            <div class="border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-slate-400 text-xs text-center md:text-left">
+                    &copy; 2026 QuickTools. All rights reserved. Made with love for the web community.
+                </p>
+                <div class="flex gap-4">
+                   <a href="me.html" class="text-slate-400 hover:text-blue-600">Developer</a>
+                    <a href="#" class="text-slate-400 hover:text-blue-600"></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </div>
+
+    <!-- Processing Canvas (Hidden) -->
+    <canvas id="procCanvas" class="hidden"></canvas>
+     <script src="/sw/network-status.js"></script>
+
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const uploadZone = document.getElementById('uploadZone');
+        const editorZone = document.getElementById('editorZone');
+        const qualitySlider = document.getElementById('qualitySlider');
+        const qualityValue = document.getElementById('qualityValue');
+        const originalPreview = document.getElementById('originalPreview');
+        const compressedPreview = document.getElementById('compressedPreview');
+        const originalSizeLabel = document.getElementById('originalSize');
+        const compressedSizeLabel = document.getElementById('compressedSize');
+        const savingsLabel = document.getElementById('savingsLabel');
+        const dimLabel = document.getElementById('dimLabel');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const canvas = document.getElementById('procCanvas');
+        const formatBtns = document.querySelectorAll('.format-btn');
+
+        let currentFile = null;
+        let currentFormat = 'image/jpeg';
+        let originalImage = new Image();
+
+        // Helpers
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Processing Logic
+        function processImage() {
+            if (!originalImage.src) return;
+
+            const quality = qualitySlider.value / 100;
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = originalImage.width;
+            canvas.height = originalImage.height;
+            ctx.drawImage(originalImage, 0, 0);
+
+            const dataUrl = canvas.toDataURL(currentFormat, quality);
+            compressedPreview.src = dataUrl;
+
+            // Estimate compressed size
+            const head = 'data:' + currentFormat + ';base64,';
+            const sizeInBytes = Math.round((dataUrl.length - head.length) * 3 / 4);
+            
+            compressedSizeLabel.innerText = formatBytes(sizeInBytes);
+            
+            const originalSize = currentFile.size;
+            const savings = Math.max(0, ((originalSize - sizeInBytes) / originalSize * 100)).toFixed(1);
+            savingsLabel.innerText = '-' + savings + '%';
+            
+            qualityValue.innerText = Math.round(quality * 100) + '%';
+        }
+
+        // Event Listeners
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                currentFile = file;
+                originalSizeLabel.innerText = formatBytes(file.size);
+                
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    originalImage.src = event.target.result;
+                    originalPreview.src = event.target.result;
+                    
+                    originalImage.onload = () => {
+                        dimLabel.innerText = `Resolution: ${originalImage.width} x ${originalImage.height}`;
+                        uploadZone.classList.add('hidden');
+                        editorZone.classList.remove('hidden');
+                        processImage();
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        qualitySlider.addEventListener('input', processImage);
+
+        formatBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                formatBtns.forEach(b => {
+                    b.classList.remove('bg-blue-50', 'border-blue-600', 'text-blue-600', 'shadow-sm');
+                    b.classList.add('bg-white', 'border-slate-200', 'text-slate-500');
+                });
+                btn.classList.add('bg-blue-50', 'border-blue-600', 'text-blue-600', 'shadow-sm');
+                btn.classList.remove('bg-white', 'border-slate-200', 'text-slate-500');
+                currentFormat = btn.dataset.format;
+                processImage();
+            });
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            const link = document.createElement('a');
+            const ext = currentFormat.split('/')[1];
+            link.download = `optimized-image.${ext}`;
+            link.href = compressedPreview.src;
+            link.click();
+        });
+
+        function resetApp() {
+            uploadZone.classList.remove('hidden');
+            editorZone.classList.add('hidden');
+            fileInput.value = '';
+            originalPreview.src = '';
+            compressedPreview.src = '';
+            currentFile = null;
+        }
+
+        // Drag and drop support
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('border-blue-500', 'bg-blue-50');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('border-blue-500', 'bg-blue-50');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('border-blue-500', 'bg-blue-50');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                fileInput.files = e.dataTransfer.files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Developer Profile</title>
+    <link rel="icon" type="image/png" href="me.jpeg">
+    <link rel="apple-touch-icon" href="me.jpeg">
+    <script src="https://cdn.tailwindcss.com"></script>
+     <script src="/sw/network-status.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            overflow-x: hidden;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.15;
+            animation: move 20s infinite alternate;
+        }
+
+        @keyframes move {
+            from { transform: translate(-10%, -10%); }
+            to { transform: translate(20%, 20%); }
+        }
+
+        /* Smooth transition for the contact section */
+        #contactSection {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        #contactSection.open {
+            max-height: 1000px;
+            opacity: 1;
+            margin-bottom: 5rem;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <!-- Animated Background Blobs -->
+    <div class="blob top-[-10%] left-[-10%]"></div>
+    <div class="blob bottom-[-10%] right-[-10%]" style="animation-delay: -5s; background: linear-gradient(135deg, #3b82f6 0%, #2dd4bf 100%);"></div>
+
+    <!-- Floating Contact Button -->
+    <button onclick="toggleContact()" id="fab" class="fixed bottom-8 right-8 z-50 group flex items-center justify-center w-16 h-16 bg-slate-900 text-white rounded-full shadow-2xl hover:bg-indigo-600 transition-all duration-300 active:scale-90 scale-100">
+        <svg id="fabIcon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-500"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <span class="absolute right-20 bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Send a Message</span>
+    </button>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 md:py-24">
+        <!-- Profile Header Section -->
+        <section class="flex flex-col md:flex-row items-center gap-12 mb-12 fade-in">
+            <!-- Image with Decorative Ring -->
+            <div class="relative group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                <div class="w-48 h-48 md:w-72 md:h-72 flex-shrink-0 relative">
+                    <img src="me.png" 
+                         alt="Developer Portrait" 
+                         class="w-full h-full rounded-3xl object-cover shadow-xl border-4 border-white bg-white">
+                </div>
+            </div>
+
+            <!-- Profile Info -->
+            <div class="text-center md:text-left slide-up">
+                <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 mb-4">
+                    Nikhil <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Raj </span>
+                </h1>
+                
+                <p class="text-xl text-slate-600 font-medium mb-6">Student & Aspiring Web Developer</p>
+                
+                <p class="text-lg text-slate-500 leading-relaxed mb-8 max-w-xl">
+                    I am a student who is interested in learning new things. I build digital experiences that are clean, fast, and accessible while exploring the world of front-end engineering.
+                </p>
+                
+                <!-- Social & Email Links -->
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                    <div class="flex gap-4">
+                        <a href="#" class="p-3 bg-white rounded-xl shadow-sm border border-slate-200 hover:border-indigo-500 hover:text-indigo-600 hover:-translate-y-1 transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                        </a>
+                        <a href="#" class="p-3 bg-white rounded-xl shadow-sm border border-slate-200 hover:border-indigo-500 hover:text-indigo-600 hover:-translate-y-1 transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                        </a>
+                    </div>
+                    
+                    <div class="h-px w-12 bg-slate-200 self-center hidden md:block"></div>
+                    
+                    <a href="mailto:atry.developer@gmail.com" class="flex items-center gap-2 text-slate-600 hover:text-indigo-600 font-semibold transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        atry.developer@gmail.com
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Form Section (Initially Hidden) -->
+        <section id="contactSection" class="max-w-2xl mx-auto">
+            <div class="glass p-8 md:p-12 rounded-[2rem] shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-8 opacity-10">
+                    <svg width="120" height="120" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                </div>
+
+                <div class="relative">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-2">Send a Message</h2>
+                    <p class="text-slate-500 mb-10">I'll try my best to respond within 24 hours.</p>
+                   
+                    <form id="contactForm" 
+                          action="https://docs.google.com/forms/d/e/1FAIpQLScN_HUf02fz9rxokwQzbv4q9hbFXwDCkIzw2kaqh8DCA4UD5g/formResponse" 
+                          method="POST" 
+                          target="hidden_iframe"
+                          onsubmit="handleFormSubmit()">
+                        
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Name</label>
+                                <input type="text" name="entry.299080537" required
+                                       class="w-full px-5 py-4 rounded-2xl bg-white/50 border border-slate-200 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all"
+                                       placeholder="Your name">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Email</label>
+                                <input type="email" name="entry.1816596065" required
+                                       class="w-full px-5 py-4 rounded-2xl bg-white/50 border border-slate-200 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all"
+                                       placeholder="hello@provider.com">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Message</label>
+                            <textarea name="entry.1686557899" rows="4" required
+                                      class="w-full px-5 py-4 rounded-2xl bg-white/50 border border-slate-200 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all"
+                                      placeholder="What can I help you with?"></textarea>
+                        </div>
+                        
+                        <button type="submit" id="submitBtn"
+                                class="w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-lg hover:bg-indigo-600 transition-all shadow-lg hover:shadow-indigo-200 flex items-center justify-center gap-3 active:scale-95">
+                            <span>Send Message</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                    </form>
+
+                    <!-- Success Message -->
+                    <div id="successMessage" class="hidden text-center py-12">
+                        <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-2">Message Received!</h3>
+                        <p class="text-slate-500">Thanks for reaching out, I'll get back to you soon.</p>
+                        <button onclick="window.location.reload()" class="mt-8 px-6 py-2 bg-slate-100 text-slate-600 rounded-full font-bold hover:bg-slate-200 transition-colors">Send Another</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hidden Iframe for Background Submission -->
+            <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) { showSuccess(); }"></iframe>
+        </section>
+    </main>
+
+    <footer class="text-center pb-12 text-slate-400 text-xs font-medium">
+        &copy; NR0846 &bull; Designed for the modern web
+    </footer>
+
+    <script>
+        let submitted = false;
+        let isContactOpen = false;
+
+        function toggleContact() {
+            const section = document.getElementById('contactSection');
+            const icon = document.getElementById('fabIcon');
+            isContactOpen = !isContactOpen;
+            
+            if (isContactOpen) {
+                section.classList.add('open');
+                icon.style.transform = 'rotate(180deg)';
+                icon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+                // Scroll to the form
+                setTimeout(() => {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }, 300);
+            } else {
+                section.classList.remove('open');
+                icon.style.transform = 'rotate(0deg)';
+                icon.innerHTML = '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>';
+            }
+        }
+
+        function handleFormSubmit() {
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Sending...';
+            submitted = true;
+        }
+
+        function showSuccess() {
+            document.getElementById('contactForm').classList.add('hidden');
+            document.getElementById('successMessage').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
